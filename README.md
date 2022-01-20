@@ -18,13 +18,14 @@ kimlik bilgilerini yapılandırmak için kullanılan komutu soruyor, zaten bu so
  aws configure
 
 
-
+--------------------------
 #2
 --------------------------
 What is the 'last-modified' date of the directory 'flaws2-logs' present in the s3 bucket?
 
 flaws2-logs dizininin son değiştirilme tarihini bulmak için terminalde "aws s3 ls" komutunu çalıştırmamız gerekiyor zaten tarih direk karşınıza çıkacak!
 
+--------------------------
 #3
 --------------------------
 What is the name of the first generated event -according to time?
@@ -43,6 +44,7 @@ zamana göre bakarsak sonuç:
 
 AssumeRole
 
+--------------------------
 #4
 --------------------------
 What source IP address generated the event dated 2018-11-28 at 23:03:20 UTC?
@@ -52,6 +54,7 @@ verilen tarih ve saatteki etkinliği hangi ip adresinin oluşturduğunu soruyor,
 
 34.234.236.212
 
+--------------------------
 #5
 --------------------------
 Which IP address does not belong to Amazon AWS infrastructure?
@@ -61,6 +64,7 @@ yukarıda 1 ip adresi bulmuştuk şimdi ise farklı olan ip adresini buluyoruz v
 
 104.102.221.250
 
+--------------------------
 #6
 --------------------------
 Which user issued the 'ListBuckets' request?
@@ -75,6 +79,7 @@ ve bulduğunuzda username kısmında hangi kullanıcının yayınladığını g�
 "userName":"level3"
 level3
 
+--------------------------
 #7
 --------------------------
 What was the first request issued by the user 'level1'?
