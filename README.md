@@ -1,111 +1,89 @@
-Merhaba dostlar, bugün "BUCKET" adlı bulut güvenliği laboratuvarını birlikte inceleyeceğiz! Bu labda, AWS S3 ve olay günlükleri üzerinden analiz yaparak bazı önemli soruları yanıtlayacağız. Haydi başlayalım!
-
-📌 1. Kimlik Bilgilerini Yapılandırma Komutu
-
-Soru: What is the full AWS CLI command used to configure credentials?
-
-Bu soru, AWS kimlik bilgilerini yapılandırmak için hangi komutun kullanıldığını soruyor. AWS CLI kullanımına aşina olanlar için oldukça basit bir soru.
-
-Cevap:
-
-aws configure
-
-Bu komut, kimlik bilgilerinizi (Access Key ve Secret Key) AWS CLI üzerinden ayarlamanıza olanak tanır.
-
-📌 2. 'flaws2-logs' Dizininin Son Değiştirilme Tarihi
-
-Soru: What is the 'last-modified' date of the directory 'flaws2-logs' present in the s3 bucket?
-
-AWS S3'te bulunan 'flaws2-logs' dizininin son değişiklik tarihini bulmamız isteniyor. Bunun için aşağıdaki komutu kullanabiliriz:
-
-aws s3 ls s3://flaws2-logs
-
-Bu komutu çalıştırdığınızda, dizinin son değişiklik tarihini doğrudan görebilirsiniz.
-
-📌 3. Zamana Göre Oluşturulan İlk Olay
-
-Soru: What is the name of the first generated event - according to time?
-
-Olayları zamana göre inceleyerek ilk oluşturulan olayı bulmamız gerekiyor.
-
-Adımlar:
-
-Gerekli günlükleri AWS S3'ten indirin:
-
-aws s3 sync s3://flaws2-logs .
-
-Gzip sıkıştırılmış JSON dosyalarını açın:
-
-gzip -d filename.json.gz
-
-İlk oluşan olayı bulmak için zaman damgasına göre araştırma yapın:
-
-grep "eventTime" *.json | sort
-
-Bulduğumuza göre, ilk olay:
-
-"eventTime":"2018-11-28 / 22:31:59", "eventName":"AssumeRole"
-
-Cevap:
-
-AssumeRole
-
-📌 4. 2018-11-28 23:03:20 UTC Tarihindeki Olayı Hangi IP Oluşturdu?
-
-Soru: What source IP address generated the event dated 2018-11-28 at 23:03:20 UTC?
-
-Adımlar:
-
-Olay günlüklerinde belirtilen tarihi arayın:
-
-grep "2018-11-28T23:03:20" *.json
-
-İlgili olayın kaynağı olan IP adresini bulun.
-
-Cevap:
-
-34.234.236.212
-
-📌 5. AWS Altyapısına Ait Olmayan IP Adresi
-
-Soru: Which IP address does not belong to Amazon AWS infrastructure?
-
-Tüm olayları analiz edip AWS'ye ait olmayan IP adresini tespit etmeliyiz. Daha önce bulunan IP adresleri ile AWS'ye ait olmayanı karşılaştırırsak:
-
-Cevap:
-
-104.102.221.250
-
-Bu IP adresi AWS altyapısına ait değil.
-
-📌 6. 'ListBuckets' İsteğini Hangi Kullanıcı Yaptı?
-
-Soru: Which user issued the 'ListBuckets' request?
-
-Adımlar:
-
-JSON günlüklerinde 'ListBuckets' olayını araştırın:
-
-grep "ListBuckets" *.json
-
-Bulunan olaylarda "userName" değerini belirleyin.
-
-Cevap:
-
-level3
-
-📌 7. 'level1' Kullanıcısının Yaptığı İlk İstek
-
-Soru: What was the first request issued by the user 'level1'?
-
-Adımlar:
-
-'level1' kullanıcısının olay günlüklerinde geçtiği satırları bulalım:
-
-grep "level1" *.json
-
-Zamana göre ilk isteği belirleyelim.
-
-Cevap:
-
-CreateLogStream
+# CyberDefenders-BUCKET
+ BUCKET - CLOUDSECURITY | WALKTHROUGH
+ ----------------------------------------
+ 
+ ![image](https://user-images.githubusercontent.com/71214341/150339012-28e9f714-728f-4428-b2ef-a02655a8fb8e.png)
+ 
+ https://cyberdefenders.org/labs/84
+  Merhaba dostlar, bugün "BUCKET" adlı bulut güvenliği konusunu ele alacağız!
+ 
+ 
+ 
+ #1
+ --------------------------
+ What is the full AWS CLI command used to configure credentials?
+ 
+ kimlik bilgilerini yapılandırmak için kullanılan komutu soruyor, zaten bu sorunun kolay olduğunu anlayabilirsiniz size verilen kimlik bilgilerini yapılandırırken yazılan AWS CLI komutunu istiyor.
+ 
+  aws configure
+ 
+ 
+ 
+ #2
+ --------------------------
+ What is the 'last-modified' date of the directory 'flaws2-logs' present in the s3 bucket?
+ 
+ flaws2-logs dizininin son değiştirilme tarihini bulmak için terminalde "aws s3 ls" komutunu çalıştırmamız gerekiyor zaten tarih direk karşınıza çıkacak!
+ 
+ #3
+ --------------------------
+ What is the name of the first generated event -according to time?
+ 
+ 
+ zamana göre ilk oluşturulan olay nedir? evet bu soru için biraz uğraşmamız gerekiyor!
+ 
+ 1- verilen paketleri incelememiz gerek. paketleri indirmek için: aws s3 sync s3://flaws2-logs .
+ 2-verilen json.gz dosyalarının hepsini gzip ile çıkarmamız gerekiyor | gzip -d filename.json.gz
+ 
+ bütün paketleri incelemek zor olacak, burada olayın adını soruyor paketlere ctrl + f yapıp olayın adını arayabiliriz 
+ 
+ zamana göre bakarsak sonuç:
+ "eventTime":"2018-11-28 / 22:31:59"
+ "eventName":"AssumeRole"
+ 
+ AssumeRole
+ 
+ #4
+ --------------------------
+ What source IP address generated the event dated 2018-11-28 at 23:03:20 UTC?
+ 
+ 
+ verilen tarih ve saatteki etkinliği hangi ip adresinin oluşturduğunu soruyor, paketlerde bu tarihi arattığınızda ip adresini bulacaksınız.
+ 
+ 34.234.236.212
+ 
+ #5
+ --------------------------
+ Which IP address does not belong to Amazon AWS infrastructure?
+ 
+ paketlerde 1 ip adresi amazonun aws alt yapısına ait değil bunu bulmamız gerek!
+ yukarıda 1 ip adresi bulmuştuk şimdi ise farklı olan ip adresini buluyoruz ve cevap:
+ 
+ 104.102.221.250
+ 
+ #6
+ --------------------------
+ Which user issued the 'ListBuckets' request?
+ 
+ ListBuckets adlı isteği hangi kullanıcının yayınladını bulalım.
+ ctrl + f ile paketlerde ListBuckets ismini aratın!
+ ve bulduğunuzda username kısmında hangi kullanıcının yayınladığını göreceksiniz :)
+ 
+ 
+ 
+ 
+ "userName":"level3"
+ level3
+ 
+ #7
+ --------------------------
+ What was the first request issued by the user 'level1'?
+ 
+ 
+ level1 kullanıcısının  verdiği ilk isteği bulalım
+ paketlerde "level1" kullanıcısını arayalım ve isteği sorduğu için direk cevabı buluyoruz!
+ 
+ 
+ 
+ "eventName":"CreateLogStream"
+ CreateLogStream
